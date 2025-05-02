@@ -2,11 +2,14 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import "./styles.css";
+import { useAuthStore } from "./lib/stores/auth";
 import { routeTree } from "./routeTree.gen";
 
 const router = createRouter({
 	routeTree,
-	context: {},
+	context: {
+		auth: useAuthStore.getState(),
+	},
 	defaultPreload: "intent",
 	scrollRestoration: true,
 	defaultStructuralSharing: true,
