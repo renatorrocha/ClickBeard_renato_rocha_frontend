@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/lib/stores/auth";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: async ({ context }) => {
@@ -11,10 +11,10 @@ export const Route = createFileRoute("/_authenticated")({
 	},
 	component: () => {
 		const { isAuthenticated } = useAuthStore();
-		console.log(isAuthenticated);
+		const navigate = useNavigate();
 		if (isAuthenticated) {
 			return <Outlet />;
 		}
-		return <p>Not authenticated</p>;
+		return navigate({ to: "/login" });
 	},
 });
