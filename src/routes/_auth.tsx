@@ -32,6 +32,6 @@ export const Route = createFileRoute("/_auth")({
 				</div>
 			);
 		}
-		return <Navigate to="/" />;
+		return <Navigate to="/admin/dashboard" />;
 	},
 });

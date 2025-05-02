@@ -1,6 +1,6 @@
+import { useAuthStore } from "@/lib/stores/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import { z } from "zod";
 import { Button } from "../ui/button";
 import {
@@ -29,8 +29,16 @@ export default function LoginForm() {
 		resolver: zodResolver(loginSchema),
 	});
 
+	const { login } = useAuthStore();
+
 	async function onSubmit(data: LoginSchema) {
-		console.log(data);
+		login({
+			email: data.email,
+			password: data.password,
+			name: "renato",
+			role: "CLIENT",
+			token: "1234567890",
+		});
 	}
 
 	return (

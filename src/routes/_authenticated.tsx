@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated")({
 	},
 	component: () => {
 		const { isAuthenticated } = useAuthStore();
+		console.log(isAuthenticated);
 		if (isAuthenticated) {
 			return <Outlet />;
 		}
