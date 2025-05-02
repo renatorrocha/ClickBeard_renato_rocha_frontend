@@ -7,7 +7,10 @@ export const Route = createRootRouteWithContext<{
 }>()({
 	component: () => (
 		<>
-			<Outlet />
+			<main className="flex h-dvh w-screen flex-col">
+				<Outlet />
+			</main>
+
 			<TanStackRouterDevtools />
 		</>
 	),
