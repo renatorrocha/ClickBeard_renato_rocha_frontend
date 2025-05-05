@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_auth")({
 		const { isAuthenticated } = useAuthStore();
 		if (!isAuthenticated) {
 			return (
-				<div className="flex h-dvh w-screen flex-col lg:flex-row">
+				<div className="flex h-dvh w-full flex-col lg:flex-row">
 					{/* Left side - Image */}
 					<figure className="relative h-64 lg:h-full lg:w-2/3 hidden lg:block">
 						<img

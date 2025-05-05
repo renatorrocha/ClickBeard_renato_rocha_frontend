@@ -7,7 +7,7 @@ export const Route = createRootRouteWithContext<{
 }>()({
 	component: () => (
 		<>
-			<main className="flex h-dvh w-screen flex-col antialiased">
+			<main className="flex h-dvh w-full flex-col antialiased">
 				<Outlet />
 			</main>
 
