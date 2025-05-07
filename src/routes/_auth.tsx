@@ -1,18 +1,10 @@
 import barberShop from "@/assets/barber-shop.jpg";
 import { useAuthStore } from "@/lib/stores/auth";
-import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
 	component: () => {
 		const { isAuthenticated } = useAuthStore();
-		const navigate = useNavigate();
-
-		useEffect(() => {
-			if (isAuthenticated) {
-				navigate({ to: "/admin/dashboard" });
-			}
-		}, [isAuthenticated, navigate]);
 
 		if (isAuthenticated) {
 			return null;

@@ -1,25 +1,10 @@
 import Header from "@/components/ui/header";
 import { useAuthStore } from "@/lib/stores/auth";
-import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
-	beforeLoad: async ({ context }) => {
-		const auth = useAuthStore.getState();
-
-		if (auth.isAuthenticated) {
-			context.auth = auth;
-		}
-	},
 	component: () => {
 		const { isAuthenticated } = useAuthStore();
-		const navigate = useNavigate();
-
-		useEffect(() => {
-			if (!isAuthenticated) {
-				navigate({ to: "/login" });
-			}
-		}, [isAuthenticated, navigate]);
 
 		if (!isAuthenticated) {
 			return null;

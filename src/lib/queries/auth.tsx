@@ -4,6 +4,7 @@ import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import api from "../api";
 import type { ILoginSchema, IRegisterSchema } from "../models/auth";
+import type { UserModel } from "../models/user";
 import { queryClient } from "../providers/react-query/query-client";
 import { useAuthStore } from "../stores/auth";
 
@@ -35,7 +36,9 @@ export const useRegister = () => {
 };
 
 async function teste(user: ILoginSchema) {
-	const response = await api.post("/auth/login", user);
+	const response = await api.post<{
+		user: UserModel;
+	}>("/auth/login", user);
 
 	return response.data;
 }
@@ -47,12 +50,17 @@ export const useLogin = () => {
 	return useMutation({
 		mutationFn: (user: ILoginSchema) => teste(user),
 		onSuccess: (data) => {
-			localStorage.setItem("@click-beard:token", data.accessToken);
+			localStorage.setItem("@click-beard:token", data.user.token);
 			login(data.user);
 
 			queryClient.invalidateQueries({ queryKey: ["auth"] });
 			toast.success("Login realizado com sucesso");
-			navigate({ to: "/admin/dashboard" });
+
+			if (data.user.role === "ADMIN") {
+				navigate({ to: "/admin" });
+			} else {
+				navigate({ to: "/client" });
+			}
 		},
 		onError: (error: AxiosError) => {
 			console.error(error);

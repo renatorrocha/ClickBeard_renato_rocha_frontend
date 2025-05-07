@@ -16,6 +16,8 @@ import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as AuthenticatedClientIndexImport } from './routes/_authenticated/client/index'
+import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedClientDashboardImport } from './routes/_authenticated/client/dashboard'
 import { Route as AuthenticatedAdminDashboardImport } from './routes/_authenticated/admin/dashboard'
 import { Route as AuthenticatedAdminBarbersImport } from './routes/_authenticated/admin/barbers'
@@ -48,6 +50,18 @@ const AuthLoginRoute = AuthLoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthenticatedClientIndexRoute = AuthenticatedClientIndexImport.update({
+  id: '/client/',
+  path: '/client/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticatedClientDashboardRoute =
@@ -130,6 +144,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClientDashboardImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/client/': {
+      id: '/_authenticated/client/'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof AuthenticatedClientIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -151,12 +179,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminBarbersRoute: typeof AuthenticatedAdminBarbersRoute
   AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedClientDashboardRoute: typeof AuthenticatedClientDashboardRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedClientIndexRoute: typeof AuthenticatedClientIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminBarbersRoute: AuthenticatedAdminBarbersRoute,
   AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
   AuthenticatedClientDashboardRoute: AuthenticatedClientDashboardRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedClientIndexRoute: AuthenticatedClientIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -171,6 +203,8 @@ export interface FileRoutesByFullPath {
   '/admin/barbers': typeof AuthenticatedAdminBarbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/client': typeof AuthenticatedClientIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -181,6 +215,8 @@ export interface FileRoutesByTo {
   '/admin/barbers': typeof AuthenticatedAdminBarbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/client': typeof AuthenticatedClientIndexRoute
 }
 
 export interface FileRoutesById {
@@ -193,6 +229,8 @@ export interface FileRoutesById {
   '/_authenticated/admin/barbers': typeof AuthenticatedAdminBarbersRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/client/dashboard': typeof AuthenticatedClientDashboardRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/client/': typeof AuthenticatedClientIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -205,6 +243,8 @@ export interface FileRouteTypes {
     | '/admin/barbers'
     | '/admin/dashboard'
     | '/client/dashboard'
+    | '/admin'
+    | '/client'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -214,6 +254,8 @@ export interface FileRouteTypes {
     | '/admin/barbers'
     | '/admin/dashboard'
     | '/client/dashboard'
+    | '/admin'
+    | '/client'
   id:
     | '__root__'
     | '/'
@@ -224,6 +266,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/barbers'
     | '/_authenticated/admin/dashboard'
     | '/_authenticated/client/dashboard'
+    | '/_authenticated/admin/'
+    | '/_authenticated/client/'
   fileRoutesById: FileRoutesById
 }
 
@@ -269,7 +313,9 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/admin/barbers",
         "/_authenticated/admin/dashboard",
-        "/_authenticated/client/dashboard"
+        "/_authenticated/client/dashboard",
+        "/_authenticated/admin/",
+        "/_authenticated/client/"
       ]
     },
     "/_auth/login": {
@@ -290,6 +336,14 @@ export const routeTree = rootRoute
     },
     "/_authenticated/client/dashboard": {
       "filePath": "_authenticated/client/dashboard.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/admin/": {
+      "filePath": "_authenticated/admin/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/client/": {
+      "filePath": "_authenticated/client/index.tsx",
       "parent": "/_authenticated"
     }
   }
