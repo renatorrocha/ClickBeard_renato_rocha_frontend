@@ -50,17 +50,25 @@ export const useLogin = () => {
 	return useMutation({
 		mutationFn: (user: ILoginSchema) => teste(user),
 		onSuccess: (data) => {
+			// Primeiro limpar o estado anterior
+			localStorage.removeItem("@click-beard:token");
+			localStorage.removeItem("@click-beard:user");
+
+			// Depois atualizar com os novos dados
 			localStorage.setItem("@click-beard:token", data.user.token);
 			login(data.user);
 
 			queryClient.invalidateQueries({ queryKey: ["auth"] });
 			toast.success("Login realizado com sucesso");
 
-			if (data.user.role === "ADMIN") {
-				navigate({ to: "/admin" });
-			} else {
-				navigate({ to: "/client" });
-			}
+			// Aguardar um momento para garantir que o estado foi atualizado
+			setTimeout(() => {
+				if (data.user.role === "ADMIN") {
+					navigate({ to: "/admin" });
+				} else {
+					navigate({ to: "/client" });
+				}
+			}, 100);
 		},
 		onError: (error: AxiosError) => {
 			console.error(error);

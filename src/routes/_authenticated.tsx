@@ -4,7 +4,7 @@ import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_authenticated")({
 	beforeLoad: ({ context, location }) => {
 		// Verifica se o usuário está autenticado
-		if (!context.auth.isAuthenticated) {
+		if (!context.auth.isAuthenticated || !context.auth.user) {
 			throw redirect({
 				to: "/login",
 				search: {
@@ -13,23 +13,28 @@ export const Route = createFileRoute("/_authenticated")({
 			});
 		}
 
-		// Verifica se o usuário está tentando acessar uma rota admin
-		if (
-			location.pathname.startsWith("/admin") &&
-			context.auth.user?.role !== "ADMIN"
-		) {
+		const userRole = context.auth.user.role;
+		const isAdminRoute = location.pathname.startsWith("/admin");
+		const isClientRoute = location.pathname.startsWith("/client");
+
+		// Se for rota admin e não for admin, redireciona
+		if (isAdminRoute && userRole !== "ADMIN") {
 			throw redirect({
 				to: "/client",
 			});
 		}
 
-		// Verifica se o usuário está tentando acessar uma rota client
-		if (
-			location.pathname.startsWith("/client") &&
-			context.auth.user?.role !== "CLIENT"
-		) {
+		// Se for rota client e não for client, redireciona
+		if (isClientRoute && userRole !== "CLIENT") {
 			throw redirect({
 				to: "/admin",
+			});
+		}
+
+		// Se não for nenhuma rota específica, redireciona baseado na role
+		if (!isAdminRoute && !isClientRoute) {
+			throw redirect({
+				to: userRole === "ADMIN" ? "/admin" : "/client",
 			});
 		}
 	},
