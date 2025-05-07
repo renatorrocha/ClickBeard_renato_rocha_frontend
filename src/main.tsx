@@ -2,8 +2,9 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import "./styles.css";
+import { routeTree } from "@/routeTree.gen";
+import QueryProvider from "./lib/providers/react-query";
 import { useAuthStore } from "./lib/stores/auth";
-import { routeTree } from "./routeTree.gen";
 
 const router = createRouter({
 	routeTree,
@@ -27,7 +28,9 @@ if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<RouterProvider router={router} />
+			<QueryProvider>
+				<RouterProvider router={router} />
+			</QueryProvider>
 		</StrictMode>,
 	);
 }
