@@ -40,10 +40,10 @@ export const Route = createFileRoute("/_authenticated")({
 	},
 	component: () => {
 		return (
-			<div className="flex flex-col min-h-screen">
+			<div className="flex flex-col min-h-screen bg-gray-800">
 				<Header />
 
-				<main className="flex-grow container mx-auto px-4 py-6">
+				<main className="flex-grow container mx-auto px-4 py-6 ">
 					<Outlet />
 				</main>
 

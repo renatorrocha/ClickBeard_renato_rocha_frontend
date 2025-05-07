@@ -126,11 +126,11 @@ export default function Header() {
 
 							<Button
 								variant="outline"
-								size="icon"
-								className="bg-gray-600 hover:bg-gray-700 border-none"
+								className="bg-gray-600 hover:bg-gray-700 border-none w-full"
 								onClick={handleLogout}
 							>
 								<LogOut className="w-5 h-5 text-gray-300" />
+								Sair
 							</Button>
 						</div>
 					</div>
