@@ -26,6 +26,7 @@ export const useCancelAppointment = () => {
 		mutationFn: (appointmentId: string) => cancelAppointment(appointmentId),
 		onSuccess: () => {
 			toast.success("Agendamento cancelado com sucesso");
+			queryClient.invalidateQueries({ queryKey: ["appointments"] });
 		},
 		onError: () => {
 			toast.error("Erro ao cancelar agendamento");
