@@ -61,7 +61,9 @@ export default function Header() {
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center py-4">
 					<div className="flex items-center">
-						<h1 className="text-xl font-bold">Click-Beard</h1>
+						<h1 className="text-xl font-bold">
+							<span className="text-blue-300">Click</span>-Beard
+						</h1>
 					</div>
 
 					{/* Desktop Navigation */}
