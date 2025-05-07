@@ -1,5 +1,6 @@
+import { useAuthStore } from "@/lib/stores/auth";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Calendar, Menu, Users, X } from "lucide-react";
+import { Calendar, LogOut, Menu, Users, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./button";
 
@@ -30,6 +31,8 @@ export default function Header() {
 		setIsMenuOpen(!isMenuOpen);
 	};
 
+	const { logout } = useAuthStore();
+
 	// Function to determine if a nav item is active
 	const isActive = (path: string) => {
 		return location.pathname.includes(path);
@@ -57,6 +60,17 @@ export default function Header() {
 								{item.name}
 							</Link>
 						))}
+
+						<Button
+							variant="outline"
+							size="icon"
+							className="bg-gray-600 hover:bg-gray-700 border-none"
+							onClick={() => {
+								logout();
+							}}
+						>
+							<LogOut className="w-5 h-5 text-gray-300" />
+						</Button>
 					</nav>
 
 					{/* Mobile Menu Button */}
@@ -91,6 +105,17 @@ export default function Header() {
 									{item.name}
 								</Link>
 							))}
+
+							<Button
+								variant="outline"
+								size="icon"
+								className="bg-gray-600 hover:bg-gray-700 border-none"
+								onClick={() => {
+									logout();
+								}}
+							>
+								<LogOut className="w-5 h-5 text-gray-300" />
+							</Button>
 						</div>
 					</div>
 				)}
