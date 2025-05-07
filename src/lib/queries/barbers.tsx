@@ -42,3 +42,22 @@ export const useGetBarbers = (specialtyId?: string, enabled = true) => {
 		enabled,
 	});
 };
+
+async function deleteBarber(barberId: string) {
+	const response = await apiPrivate.delete(`/barbers/${barberId}`);
+
+	return response.data;
+}
+
+export const useDeleteBarber = () => {
+	return useMutation({
+		mutationFn: (barberId: string) => deleteBarber(barberId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["barbers"] });
+			toast.success("Barbeiro excluído com sucesso");
+		},
+		onError: (error: AxiosError) => {
+			console.error(error);
+		},
+	});
+};

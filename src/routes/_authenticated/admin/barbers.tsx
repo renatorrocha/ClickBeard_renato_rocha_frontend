@@ -9,6 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { DeleteBarberButton } from "@/components/ui/delete-barber";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -173,6 +174,8 @@ function RouteComponent() {
 															<Pencil className="h-4 w-4" />
 															<span className="sr-only">Editar</span>
 														</Button>
+
+														<DeleteBarberButton barberId={barber.id ?? ""} />
 													</div>
 												</TableCell>
 											</TableRow>
@@ -190,8 +193,7 @@ function RouteComponent() {
 					</CardContent>
 					<CardFooter className="flex justify-between">
 						<div className="text-sm text-muted-foreground">
-							Total de barbeiros:
-							{barberName}
+							Total de barbeiros: {barbers?.length}
 						</div>
 					</CardFooter>
 				</Card>
