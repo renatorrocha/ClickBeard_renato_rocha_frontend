@@ -1,9 +1,7 @@
 import { type ILoginSchema, loginSchema } from "@/lib/models/auth";
-import { useAuthStore } from "@/lib/stores/auth";
+import { useLogin } from "@/lib/queries/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../ui/button";
 import {
 	Form,
 	FormControl,
@@ -13,6 +11,7 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import ControlledBtn from "./controlled-btn";
 
 export default function LoginForm() {
 	const form = useForm<ILoginSchema>({
@@ -23,7 +22,7 @@ export default function LoginForm() {
 		},
 	});
 
-	const { login } = useAuthStore();
+	const { mutate: login, isPending } = useLogin();
 
 	async function onSubmit(data: ILoginSchema) {
 		login(data);
@@ -65,9 +64,9 @@ export default function LoginForm() {
 					)}
 				/>
 
-				<Button type="submit" className="w-full">
+				<ControlledBtn type="submit" isLoading={isPending}>
 					Entrar
-				</Button>
+				</ControlledBtn>
 			</form>
 		</Form>
 	);

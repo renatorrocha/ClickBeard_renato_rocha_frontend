@@ -9,10 +9,13 @@ export type AuthState = {
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
-	isAuthenticated: false,
+	isAuthenticated: localStorage.getItem("@click-beard:token") !== null,
 	user: undefined,
 
 	login: (user) => set({ isAuthenticated: true, user }),
 
-	logout: () => set({ isAuthenticated: false, user: undefined }),
+	logout: () => {
+		set({ isAuthenticated: false, user: undefined });
+		localStorage.removeItem("@click-beard:token");
+	},
 }));

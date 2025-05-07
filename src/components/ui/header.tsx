@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/lib/stores/auth";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Calendar, LogOut, Menu, Users, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./button";
@@ -13,6 +13,7 @@ type NavItem = {
 export default function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const navigation: NavItem[] = [
 		{
@@ -27,16 +28,20 @@ export default function Header() {
 		},
 	];
 
-	const toggleMenu = () => {
+	function toggleMenu() {
 		setIsMenuOpen(!isMenuOpen);
-	};
+	}
 
 	const { logout } = useAuthStore();
 
-	// Function to determine if a nav item is active
-	const isActive = (path: string) => {
+	function handleLogout() {
+		logout();
+		navigate({ to: "/login" });
+	}
+
+	function isActive(path: string) {
 		return location.pathname.includes(path);
-	};
+	}
 
 	return (
 		<header className="bg-gray-900 text-white shadow-md">
@@ -65,9 +70,7 @@ export default function Header() {
 							variant="outline"
 							size="icon"
 							className="bg-gray-600 hover:bg-gray-700 border-none"
-							onClick={() => {
-								logout();
-							}}
+							onClick={handleLogout}
 						>
 							<LogOut className="w-5 h-5 text-gray-300" />
 						</Button>
@@ -110,9 +113,7 @@ export default function Header() {
 								variant="outline"
 								size="icon"
 								className="bg-gray-600 hover:bg-gray-700 border-none"
-								onClick={() => {
-									logout();
-								}}
+								onClick={handleLogout}
 							>
 								<LogOut className="w-5 h-5 text-gray-300" />
 							</Button>

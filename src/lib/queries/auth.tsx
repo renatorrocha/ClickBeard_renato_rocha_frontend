@@ -3,8 +3,9 @@ import { useNavigate } from "@tanstack/react-router";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import api from "../api";
-import type { IRegisterSchema } from "../models/auth";
+import type { ILoginSchema, IRegisterSchema } from "../models/auth";
 import { queryClient } from "../providers/react-query/query-client";
+import { useAuthStore } from "../stores/auth";
 
 async function register(user: IRegisterSchema) {
 	const response = await api.post("/auth/register", user);
@@ -27,6 +28,35 @@ export const useRegister = () => {
 		onError: (error: AxiosError) => {
 			console.error(error);
 			toast.error("Erro ao criar usuário", {
+				description: error.response?.data as string,
+			});
+		},
+	});
+};
+
+async function teste(user: ILoginSchema) {
+	const response = await api.post("/auth/login", user);
+
+	return response.data;
+}
+
+export const useLogin = () => {
+	const navigate = useNavigate();
+	const { login } = useAuthStore();
+
+	return useMutation({
+		mutationFn: (user: ILoginSchema) => teste(user),
+		onSuccess: (data) => {
+			localStorage.setItem("@click-beard:token", data.accessToken);
+			login(data.user);
+
+			queryClient.invalidateQueries({ queryKey: ["auth"] });
+			toast.success("Login realizado com sucesso");
+			navigate({ to: "/admin/dashboard" });
+		},
+		onError: (error: AxiosError) => {
+			console.error(error);
+			toast.error("Erro ao fazer login", {
 				description: error.response?.data as string,
 			});
 		},
