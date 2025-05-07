@@ -70,3 +70,19 @@ export const useGetAppointmentsByClientId = (userId: string) => {
 		queryFn: () => getAppointmentsByClientId(userId),
 	});
 };
+
+async function getAppointmentsByBarberId(barberId: string) {
+	const response = await apiPrivate.get(`/barbers/${barberId}/appointments`);
+	return response.data ?? [];
+}
+
+export const useGetAppointmentsByBarberId = (
+	barberId: string,
+	enabled = true,
+) => {
+	return useQuery({
+		queryKey: ["appointments", barberId],
+		queryFn: () => getAppointmentsByBarberId(barberId),
+		enabled,
+	});
+};

@@ -1,6 +1,9 @@
 import { createAppointmentSchema } from "@/lib/models/appointment";
 import type { ICreateAppointment } from "@/lib/models/appointment";
-import { useCreateAppointment } from "@/lib/queries/appointments";
+import {
+	useCreateAppointment,
+	useGetAppointmentsByBarberId,
+} from "@/lib/queries/appointments";
 import { useGetBarbers } from "@/lib/queries/barbers";
 import { useSpecialties } from "@/lib/queries/utils";
 import { useAuthStore } from "@/lib/stores/auth";
@@ -55,7 +58,16 @@ export default function AppointmentForm({
 
 	const specialtyId = form.watch("specialtyId");
 
+	const barberId = form.watch("barberId");
+
 	const { data: barbers } = useGetBarbers(specialtyId, !!specialtyId);
+
+	const { data: appointments } = useGetAppointmentsByBarberId(
+		barberId,
+		!!barberId,
+	);
+
+	console.log(appointments);
 
 	const barbersOptions = barbers?.map((barber) => ({
 		label: barber.name,
@@ -89,8 +101,18 @@ export default function AppointmentForm({
 		});
 	}
 
+	function resetForm() {
+		form.reset();
+		setTime(null);
+	}
+
+	function handleDialogClose() {
+		resetForm();
+		onCancel();
+	}
+
 	return (
-		<Dialog open={isOpen} onOpenChange={onCancel}>
+		<Dialog open={isOpen} onOpenChange={handleDialogClose}>
 			<DialogContent className="sm:max-w-2xl space-y-4">
 				<DialogHeader>
 					<DialogTitle>Adicionar Agendamento</DialogTitle>
@@ -189,6 +211,7 @@ export default function AppointmentForm({
 												setDate={field.onChange}
 												time={time}
 												setTime={setTime}
+												appointments={appointments}
 											/>
 										</FormControl>
 										<FormMessage />

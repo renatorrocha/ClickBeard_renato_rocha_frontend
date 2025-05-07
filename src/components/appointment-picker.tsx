@@ -5,40 +5,81 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+interface Appointment {
+	id: string;
+	date: string;
+	canceledAt: string | null;
+	specialtyId: string;
+	userId: string;
+	barberId: string;
+	createdAt: string;
+	user: {
+		id: string;
+		name: string;
+		email: string;
+		password: string;
+		role: string;
+		createdAt: string;
+	};
+	specialty: {
+		id: string;
+		label: string;
+	};
+}
+
 export default function AppointmentPicker({
 	date,
 	setDate,
 	time,
 	setTime,
+	appointments = [],
 }: {
 	date: Date;
 	setDate: (date: Date) => void;
 	time: string | null;
 	setTime: (time: string | null) => void;
+	appointments?: Appointment[];
 }) {
 	const today = new Date();
 
-	// Mock time slots data
+	// Função para verificar se um horário está disponível
+	const isTimeSlotAvailable = (timeSlot: string) => {
+		const selectedDate = format(date, "yyyy-MM-dd");
+		const dateTime = `${selectedDate}T${timeSlot}:00.000Z`;
+
+		// Verifica se existe algum agendamento não cancelado para este horário
+		return !appointments.some(
+			(appointment) => appointment.date === dateTime && !appointment.canceledAt,
+		);
+	};
+
+	// Gera os horários disponíveis
 	const timeSlots = [
-		{ time: "09:00", available: false },
-		{ time: "09:30", available: false },
-		{ time: "10:00", available: true },
-		{ time: "10:30", available: true },
-		{ time: "11:00", available: true },
-		{ time: "11:30", available: true },
-		{ time: "12:00", available: false },
-		{ time: "12:30", available: true },
-		{ time: "13:00", available: true },
-		{ time: "13:30", available: true },
-		{ time: "14:00", available: true },
-		{ time: "14:30", available: false },
-		{ time: "15:00", available: false },
-		{ time: "15:30", available: true },
-		{ time: "16:00", available: true },
-		{ time: "16:30", available: true },
-		{ time: "17:00", available: true },
-		{ time: "17:30", available: true },
-	];
+		"08:00",
+		"08:30",
+		"09:00",
+		"09:30",
+		"10:00",
+		"10:30",
+		"11:00",
+		"11:30",
+		"12:00",
+		"12:30",
+		"13:00",
+		"13:30",
+		"14:00",
+		"14:30",
+		"15:00",
+		"15:30",
+		"16:00",
+		"16:30",
+		"17:00",
+		"17:30",
+		"18:00",
+	].map((time) => ({
+		time,
+		available: isTimeSlotAvailable(time),
+	}));
 
 	return (
 		<div>
