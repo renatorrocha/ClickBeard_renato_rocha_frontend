@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Calendar, Menu, Users, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./button";
@@ -11,6 +11,7 @@ type NavItem = {
 
 export default function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const location = useLocation();
 
 	const navigation: NavItem[] = [
 		{
@@ -31,7 +32,7 @@ export default function Header() {
 
 	// Function to determine if a nav item is active
 	const isActive = (path: string) => {
-		return window.location.pathname.includes(path);
+		return location.pathname.includes(path);
 	};
 
 	return (
@@ -48,7 +49,7 @@ export default function Header() {
 							<Link
 								key={item.name}
 								to={item.href}
-								className={`flex items-center transition-colors duration-200 hover:text-blue-400 ${
+								className={`flex items-center transition-colors duration-200 hover:text-blue-300 ${
 									isActive(item.href) ? "text-blue-400 font-medium" : ""
 								}`}
 							>
