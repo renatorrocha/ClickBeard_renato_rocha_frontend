@@ -16,7 +16,7 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { MultiSelect, type Option } from "@/components/ui/multi-select";
+import { MultiSelect } from "@/components/ui/multi-select";
 import {
 	type IBarberModel,
 	type ICreateBarberModel,
@@ -24,29 +24,31 @@ import {
 	createBarberModel,
 	updateBarberModel,
 } from "@/lib/models/barber";
+import { useCreateBarber } from "@/lib/queries/barbers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { useForm } from "react-hook-form";
-
-const specialitiesOptions: Option[] = [
-	{ label: "Corte Masculino", value: "corte-masculino" },
-	{ label: "Barba", value: "barba" },
-	{ label: "Sobrancelha", value: "sobrancelha" },
-	{ label: "Coloração", value: "coloracao" },
-	{ label: "Tratamento Capilar", value: "tratamento-capilar" },
-	{ label: "Penteados", value: "penteados" },
-];
 
 export default function BarberForm({
 	barberData,
 	onCancel,
 	isOpen,
+	specialities,
 }: {
 	onCancel: () => void;
 	barberData?: IBarberModel;
+	specialities: { id: string; label: string }[];
 	isOpen: boolean;
 }) {
 	const isEditing = Boolean(barberData);
+
+	const specialitiesOptions = specialities.map((speciality) => ({
+		label: speciality.label,
+		value: speciality.id,
+	}));
+
+	const { mutate: createBarber, isPending: isCreatingBarber } =
+		useCreateBarber();
 
 	const form = useForm<ICreateBarberModel | IUpdateBarberModel>({
 		resolver: zodResolver(isEditing ? updateBarberModel : createBarberModel),
@@ -59,6 +61,7 @@ export default function BarberForm({
 	});
 
 	async function onSubmit(data: ICreateBarberModel | IUpdateBarberModel) {
+		createBarber(data);
 		console.log(data);
 	}
 
@@ -130,7 +133,11 @@ export default function BarberForm({
 								Cancelar
 							</Button>
 
-							<ControlledBtn type="submit" isLoading={false} className="w-fit">
+							<ControlledBtn
+								type="submit"
+								isLoading={isCreatingBarber}
+								className="w-fit"
+							>
 								<Save className="mr-2 h-4 w-4" />
 								{isEditing ? "Atualizar Barbeiro" : "Adicionar Barbeiro"}
 							</ControlledBtn>

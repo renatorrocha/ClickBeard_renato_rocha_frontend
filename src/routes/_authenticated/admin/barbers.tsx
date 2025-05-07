@@ -25,6 +25,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { getSpecialities, useSpecialities } from "@/lib/queries/utils";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Pencil, Plus, Search } from "lucide-react";
 import { useState } from "react";
@@ -98,6 +99,7 @@ export const Route = createFileRoute("/_authenticated/admin/barbers")({
 });
 
 function RouteComponent() {
+	const { data: specialities } = useSpecialities();
 	const [barbers, setBarbers] = useState<Barber[]>(initialBarbers);
 	const { barberName, specialty } = Route.useSearch();
 	const [isOpen, setIsOpen] = useState(false);
@@ -254,6 +256,7 @@ function RouteComponent() {
 			</div>
 
 			<BarberForm
+				specialities={specialities ?? []}
 				onCancel={() => setIsOpen(false)}
 				barberData={undefined}
 				isOpen={isOpen}
