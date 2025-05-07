@@ -42,7 +42,7 @@ export default function LoginForm() {
 							<FormLabel>Email</FormLabel>
 
 							<FormControl>
-								<Input {...field} />
+								<Input type="email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -57,7 +57,7 @@ export default function LoginForm() {
 							<FormLabel>Senha</FormLabel>
 
 							<FormControl>
-								<Input {...field} />
+								<Input type="password" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

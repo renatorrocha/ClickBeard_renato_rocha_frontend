@@ -114,7 +114,7 @@ export default function AppointmentPicker({
 												key={timeSlot}
 												variant={time === timeSlot ? "default" : "outline"}
 												size="sm"
-												className="w-full"
+												className="w-full bg-blue-500 hover:bg-blue-600"
 												onClick={() => setTime(timeSlot)}
 												disabled={!available}
 											>

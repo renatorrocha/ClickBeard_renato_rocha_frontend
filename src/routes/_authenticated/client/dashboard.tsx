@@ -37,7 +37,10 @@ function RouteComponent() {
 						</CardDescription>
 					</div>
 
-					<Button onClick={() => setIsOpen(true)} className="bg-primary">
+					<Button
+						onClick={() => setIsOpen(true)}
+						className="bg-blue-500 hover:bg-blue-600"
+					>
 						<Plus className="mr-2 h-4 w-4" />
 						Novo Agendamento
 					</Button>

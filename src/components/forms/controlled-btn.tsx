@@ -16,7 +16,11 @@ export default function ControlledBtn({
 	...props
 }: IControlledBtn) {
 	return (
-		<Button disabled={isLoading} className={className ?? "w-full"} {...props}>
+		<Button
+			disabled={isLoading}
+			className={className ?? "w-full bg-blue-500 hover:bg-blue-600"}
+			{...props}
+		>
 			{isLoading ? (
 				<div className="flex items-center gap-4">
 					<Loader2 className="animate-spin" />

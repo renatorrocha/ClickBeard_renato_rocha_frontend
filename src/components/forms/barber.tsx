@@ -161,7 +161,11 @@ export default function BarberForm({
 						</div>
 
 						<div className="flex justify-end gap-2 pt-2">
-							<Button variant="outline" onClick={onCancel}>
+							<Button
+								variant="outline"
+								onClick={onCancel}
+								className="bg-red-500 hover:bg-red-600"
+							>
 								Cancelar
 							</Button>
 
