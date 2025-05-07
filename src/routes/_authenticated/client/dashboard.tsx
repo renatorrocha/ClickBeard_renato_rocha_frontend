@@ -1,7 +1,17 @@
-import { CancelAppointmentButton } from "@/components/ui/cancel-appointment-btn";
-import { useGetAppointments } from "@/lib/queries/appointments";
+import AppointmentForm from "@/components/forms/appointment";
+import AppointmentCard from "@/components/ui/appointment-card";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import type { IAppointment } from "@/lib/models/appointment";
 import { createFileRoute } from "@tanstack/react-router";
-import { formatDate } from "date-fns";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/client/dashboard")({
 	component: RouteComponent,
@@ -9,17 +19,20 @@ export const Route = createFileRoute("/_authenticated/client/dashboard")({
 
 function RouteComponent() {
 	// const { data: appointments } = useGetAppointments();
-	const appointments = [
+	const [isOpen, setIsOpen] = useState(false);
+	const appointments: IAppointment[] = [
 		{
 			id: "1",
 			date: "2024-01-01",
-			canceledAt: "2024-01-01",
+			canceledAt: new Date("2024-01-01"),
 			specialty: {
 				name: "Cabelo",
 			},
 			barber: {
 				name: "João da Silva",
 			},
+			createdAt: new Date("2024-01-01"),
+			updatedAt: new Date("2024-01-01"),
 		},
 		{
 			id: "1",
@@ -41,67 +54,128 @@ function RouteComponent() {
 				name: "João da Silva",
 			},
 		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "1",
+			date: "2025-06-01",
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
 	];
 
 	return (
-		<div className="container py-10">
-			<h1 className="text-2xl font-bold mb-6">Meus Agendamentos</h1>
+		<>
+			<Card>
+				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+					<div>
+						<CardTitle>Gerenciamento de Barbeiros</CardTitle>
+						<CardDescription>
+							Cadastre e gerencie os barbeiros da sua barbearia
+						</CardDescription>
+					</div>
 
-			{appointments.length === 0 ? (
-				<div className="text-center py-10">
-					<p className="text-muted-foreground">Você não possui agendamentos.</p>
-				</div>
-			) : (
-				<div className="space-y-4">
-					{appointments.map((appointment) => {
-						const appointmentDate = new Date(appointment.date);
-						const now = new Date();
-						const timeDiff = appointmentDate.getTime() - now.getTime();
-						const hoursDiff = timeDiff / (1000 * 60 * 60);
-						const canCancel = hoursDiff > 2 && !appointment.canceledAt;
-						const isPast = appointmentDate < now;
+					<Button onClick={() => setIsOpen(true)} className="bg-primary">
+						<Plus className="mr-2 h-4 w-4" />
+						Novo Agendamento
+					</Button>
+				</CardHeader>
 
-						return (
-							<div
-								key={appointment.id}
-								className={`p-4 border rounded-lg ${
-									appointment.canceledAt
-										? "bg-muted/50 border-muted"
-										: isPast
-											? "bg-muted/30"
-											: "bg-card"
-								}`}
-							>
-								<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-									<div>
-										<h3 className="font-medium">
-											{appointment.specialty.name} com {appointment.barber.name}
-										</h3>
-										<p className="text-sm text-muted-foreground">
-											{formatDate(appointment.date, "dd/MM/yyyy")}
-										</p>
-										{appointment.canceledAt && (
-											<p className="text-sm text-destructive mt-1">
-												Cancelado em{" "}
-												{formatDate(appointment.canceledAt, "dd/MM/yyyy HH:mm")}
-											</p>
-										)}
-										{isPast && !appointment.canceledAt && (
-											<p className="text-sm text-muted-foreground mt-1">
-												Agendamento concluído
-											</p>
-										)}
-									</div>
+				<CardContent>
+					{appointments.length === 0 ? (
+						<div className="text-center py-10">
+							<p className="text-muted-foreground">
+								Você não possui agendamentos.
+							</p>
+						</div>
+					) : (
+						<div className="space-y-4">
+							{appointments.map((appointment) => {
+								return (
+									<AppointmentCard
+										key={appointment.id}
+										appointment={appointment}
+									/>
+								);
+							})}
+						</div>
+					)}
+				</CardContent>
+			</Card>
 
-									{canCancel && (
-										<CancelAppointmentButton appointmentId={appointment.id} />
-									)}
-								</div>
-							</div>
-						);
-					})}
-				</div>
-			)}
-		</div>
+			<AppointmentForm onCancel={() => setIsOpen(false)} isOpen={isOpen} />
+		</>
 	);
 }

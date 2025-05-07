@@ -10,8 +10,8 @@ import {
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useCancelAppointment } from "@/lib/queries/appointments";
 import { AlertCircle } from "lucide-react";
-import { useState } from "react";
 
 interface CancelAppointmentButtonProps {
 	appointmentId: string;
@@ -20,7 +20,8 @@ interface CancelAppointmentButtonProps {
 export function CancelAppointmentButton({
 	appointmentId,
 }: CancelAppointmentButtonProps) {
-	const [isLoading, setIsLoading] = useState(false);
+	const { mutate: cancelAppointment, isPending: isLoading } =
+		useCancelAppointment();
 
 	return (
 		<AlertDialog>
@@ -46,6 +47,7 @@ export function CancelAppointmentButton({
 				<AlertDialogFooter>
 					<AlertDialogCancel>Voltar</AlertDialogCancel>
 					<AlertDialogAction
+						onClick={() => cancelAppointment(appointmentId)}
 						disabled={isLoading}
 						className="bg-destructive hover:bg-destructive/90"
 					>
