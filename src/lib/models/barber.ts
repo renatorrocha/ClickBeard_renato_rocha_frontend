@@ -1,10 +1,12 @@
 import { z } from "zod";
 
 export const barberModel = z.object({
-	id: z.string(),
-	name: z.string(),
-	document: z.string(),
-	specialities: z.array(z.string()),
+	id: z.string().min(1, { message: "ID é obrigatório" }),
+	name: z.string().min(1, { message: "Nome é obrigatório" }),
+	document: z.string().min(1, { message: "CPF é obrigatório" }),
+	specialties: z
+		.array(z.string())
+		.min(1, { message: "Especialidades são obrigatórias" }),
 	createdAt: z.date(),
 });
 

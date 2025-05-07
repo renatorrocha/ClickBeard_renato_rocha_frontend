@@ -33,18 +33,18 @@ export default function BarberForm({
 	barberData,
 	onCancel,
 	isOpen,
-	specialities,
+	specialties,
 }: {
 	onCancel: () => void;
 	barberData?: IBarberModel;
-	specialities: { id: string; label: string }[];
+	specialties: { id: string; label: string }[];
 	isOpen: boolean;
 }) {
 	const isEditing = Boolean(barberData);
 
-	const specialitiesOptions = specialities.map((speciality) => ({
-		label: speciality.label,
-		value: speciality.id,
+	const specialtiesOptions = specialties.map((specialty) => ({
+		label: specialty.label,
+		value: specialty.id,
 	}));
 
 	const { mutate: createBarber, isPending: isCreatingBarber } =
@@ -55,14 +55,18 @@ export default function BarberForm({
 		defaultValues: {
 			name: barberData?.name || "",
 			document: barberData?.document || "",
-			specialities: barberData?.specialities || [],
+			specialties: barberData?.specialties || [],
 			...(isEditing && { id: barberData?.id }),
 		},
 	});
 
 	async function onSubmit(data: ICreateBarberModel | IUpdateBarberModel) {
-		createBarber(data);
-		console.log(data);
+		createBarber(data, {
+			onSuccess: () => {
+				form.reset();
+				onCancel();
+			},
+		});
 	}
 
 	return (
@@ -110,13 +114,13 @@ export default function BarberForm({
 
 							<FormField
 								control={form.control}
-								name="specialities"
+								name="specialties"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Especialidades</FormLabel>
 										<FormControl>
 											<MultiSelect
-												options={specialitiesOptions}
+												options={specialtiesOptions}
 												selected={field.value}
 												onChange={field.onChange}
 												placeholder="Selecione as especialidades..."

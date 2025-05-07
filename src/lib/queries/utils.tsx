@@ -1,16 +1,16 @@
 import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
-export async function getSpecialities() {
-	const response = await api.get("/utils/specialities");
+export async function getSpecialties() {
+	const response = await api.get("/utils/specialties");
 
 	return response.data ?? [];
 }
 
-export const useSpecialities = () => {
+export const useSpecialties = () => {
 	const query = useQuery({
-		queryKey: ["specialities"],
-		queryFn: getSpecialities,
+		queryKey: ["specialties"],
+		queryFn: getSpecialties,
 	});
 
 	return query;
