@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import api from "../api";
@@ -12,11 +13,16 @@ async function register(user: IRegisterSchema) {
 }
 
 export const useRegister = () => {
+	const navigate = useNavigate();
+
 	return useMutation({
 		mutationFn: (user: IRegisterSchema) => register(user),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["auth"] });
-			toast.success("Usuário criado com sucesso");
+			toast.success("Usuário criado com sucesso", {
+				description: "Agora você pode fazer login",
+			});
+			navigate({ to: "/login" });
 		},
 		onError: (error: AxiosError) => {
 			console.error(error);

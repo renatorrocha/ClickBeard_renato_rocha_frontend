@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 
 import { type IRegisterSchema, registerSchema } from "@/lib/models/auth";
 import { useRegister } from "@/lib/queries/auth";
-import { z } from "zod";
 import {
 	Form,
 	FormControl,
@@ -15,17 +14,11 @@ import {
 import { Input } from "../ui/input";
 import ControlledBtn from "./controlled-btn";
 
-const teste = z.object({
-	name: z.string(),
-	email: z.string().email(),
-	password: z.string().min(8),
-});
-
 export default function RegisterForm() {
 	const { mutate: register, isPending } = useRegister();
 
 	const form = useForm<IRegisterSchema>({
-		resolver: zodResolver(teste),
+		resolver: zodResolver(registerSchema),
 
 		defaultValues: {
 			name: "",
@@ -67,7 +60,7 @@ export default function RegisterForm() {
 							<FormLabel>Email</FormLabel>
 
 							<FormControl>
-								<Input {...field} />
+								<Input type="email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -82,14 +75,14 @@ export default function RegisterForm() {
 							<FormLabel>Senha</FormLabel>
 
 							<FormControl>
-								<Input {...field} />
+								<Input type="password" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
-				<ControlledBtn type="submit" isLoading={isPending} className="w-fit">
+				<ControlledBtn type="submit" isLoading={isPending}>
 					Criar conta
 				</ControlledBtn>
 			</form>
