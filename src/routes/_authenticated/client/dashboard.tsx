@@ -23,7 +23,7 @@ function RouteComponent() {
 	const appointments: IAppointment[] = [
 		{
 			id: "1",
-			date: "2024-01-01",
+			date: new Date("2024-01-01"),
 			canceledAt: new Date("2024-01-01"),
 			specialty: {
 				name: "Cabelo",
@@ -35,8 +35,88 @@ function RouteComponent() {
 			updatedAt: new Date("2024-01-01"),
 		},
 		{
-			id: "1",
-			date: "2024-01-01",
+			id: "2",
+			date: new Date("2024-01-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "3",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "4",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "5",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "6",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "7",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "8",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "9",
+			date: new Date("2025-06-01"),
+			specialty: {
+				name: "Cabelo",
+			},
+			barber: {
+				name: "João da Silva",
+			},
+		},
+		{
+			id: "10",
+			date: new Date("2025-06-01"),
 			specialty: {
 				name: "Cabelo",
 			},
@@ -46,87 +126,7 @@ function RouteComponent() {
 		},
 		{
 			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: "2025-06-01",
+			date: new Date("2025-06-01"),
 			specialty: {
 				name: "Cabelo",
 			},

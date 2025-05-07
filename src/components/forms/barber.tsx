@@ -49,13 +49,12 @@ export default function BarberForm({
 
 	const { mutate: createBarber, isPending: isCreatingBarber } =
 		useCreateBarber();
-
 	const form = useForm<ICreateBarberModel | IUpdateBarberModel>({
 		resolver: zodResolver(isEditing ? updateBarberModel : createBarberModel),
 		defaultValues: {
 			name: barberData?.name || "",
 			document: barberData?.document || "",
-			specialties: barberData?.specialties || [],
+			specialties: barberData?.specialties.map((spec) => spec.id) || [],
 			...(isEditing && { id: barberData?.id }),
 		},
 	});
