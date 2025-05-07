@@ -1,3 +1,4 @@
+import barberShop from "@/assets/barber-shop.jpg";
 import { Button } from "@/components/ui/button";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Github } from "lucide-react";
@@ -84,7 +85,7 @@ function App() {
 					<div className="absolute inset-0 bg-blue-500/10 rounded-full blur-3xl" />
 					<div className="relative z-10 h-[400px] w-[400px] rounded-full overflow-hidden border-4 border-blue-500/30">
 						<img
-							src="/placeholder.svg?height=400&width=400"
+							src={barberShop}
 							alt="Barbeiro profissional"
 							width={400}
 							height={400}
@@ -98,11 +99,11 @@ function App() {
 			<footer className="w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center bg-zinc-800">
 				<div className="flex items-center gap-4 mb-4 md:mb-0">
 					<div className="flex items-center gap-1">
-						<MapPin className="h-4 w-4 text-amber-500" />
+						<MapPin className="h-4 w-4 text-blue-500" />
 						<span className="text-sm">Av. Principal, 123</span>
 					</div>
 					<div className="flex items-center gap-1">
-						<Phone className="h-4 w-4 text-amber-500" />
+						<Phone className="h-4 w-4 text-blue-500" />
 						<span className="text-sm">(11) 99999-9999</span>
 					</div>
 				</div>
@@ -111,7 +112,7 @@ function App() {
 						href="https://www.renatodev.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="text-zinc-400 hover:text-amber-500"
+						className="text-zinc-400 hover:text-blue-500"
 					>
 						<Github className="h-5 w-5" />
 					</a>
