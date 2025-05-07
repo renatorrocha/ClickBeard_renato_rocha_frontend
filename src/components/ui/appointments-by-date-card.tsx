@@ -18,14 +18,6 @@ import {
 	TooltipTrigger,
 } from "./tooltip";
 
-// Mapeamento de IDs de barbeiros para nomes
-const barberNames: Record<string, string> = {
-	"1": "Renato",
-	"2": "Carlos",
-	"3": "Felipe",
-	// Adicione mais barbeiros conforme necessário
-};
-
 export default function AppointmentsByDateCard({
 	currentDate,
 	dayAppointments,
@@ -76,7 +68,7 @@ export default function AppointmentsByDateCard({
 												<span>{format(appointment.date, "HH:mm")}</span>
 											</div>
 											<div className="font-medium truncate max-w-[120px]">
-												{appointment.clientName}
+												{appointment.user.name}
 											</div>
 											<div className="flex items-center gap-1">
 												{appointment.canceledAt ? (
@@ -86,7 +78,7 @@ export default function AppointmentsByDateCard({
 													</Badge>
 												) : (
 													<Badge variant="outline" className="text-xs h-5">
-														{barberNames[appointment.barberId] || "Barbeiro"}
+														{appointment.barber.name || "Barbeiro"}
 													</Badge>
 												)}
 											</div>
@@ -96,14 +88,14 @@ export default function AppointmentsByDateCard({
 									<TooltipContent>
 										<div className="space-y-1 text-xs">
 											<p>
-												<strong>Cliente:</strong> {appointment.clientName}
+												<strong>Cliente:</strong> {appointment.user.name}
 											</p>
 											<p>
-												<strong>Serviço:</strong> {appointment.service}
+												<strong>Serviço:</strong> {appointment.specialty.label}
 											</p>
 											<p>
 												<strong>Barbeiro:</strong>{" "}
-												{barberNames[appointment.barberId] || "Não definido"}
+												{appointment.barber.name || "Não definido"}
 											</p>
 											{appointment.canceledAt && (
 												<p>

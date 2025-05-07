@@ -16,17 +16,21 @@ export const Route = createFileRoute("/_authenticated/admin/dashboard")({
 });
 export type Appointment = {
 	id: string;
-	clientName: string;
-	barberId: string;
-	service: string;
+	user: {
+		name: string;
+	};
+	barber: {
+		name: string;
+	};
+	specialty: {
+		label: string;
+	};
 	date: Date;
 	canceledAt?: Date;
 };
 
 function RouteComponent() {
 	const { data: appointments, isLoading } = useGetAppointments();
-
-	console.log(appointments);
 
 	if (isLoading) {
 		return (
