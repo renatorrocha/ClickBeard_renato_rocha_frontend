@@ -26,10 +26,11 @@ declare module "@tanstack/react-router" {
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
+	const auth = useAuthStore.getState();
 	root.render(
 		<StrictMode>
 			<QueryProvider>
-				<RouterProvider router={router} />
+				<RouterProvider router={router} context={{ auth }} />
 			</QueryProvider>
 		</StrictMode>,
 	);

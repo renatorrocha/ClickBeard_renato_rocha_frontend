@@ -8,14 +8,23 @@ export type AuthState = {
 	logout: () => void;
 };
 
+const getStoredUser = (): UserModel | undefined => {
+	const storedUser = localStorage.getItem("@click-beard:user");
+	return storedUser ? JSON.parse(storedUser) : undefined;
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
 	isAuthenticated: localStorage.getItem("@click-beard:token") !== null,
-	user: undefined,
+	user: getStoredUser(),
 
-	login: (user) => set({ isAuthenticated: true, user }),
+	login: (user) => {
+		localStorage.setItem("@click-beard:user", JSON.stringify(user));
+		set({ isAuthenticated: true, user });
+	},
 
 	logout: () => {
 		set({ isAuthenticated: false, user: undefined });
 		localStorage.removeItem("@click-beard:token");
+		localStorage.removeItem("@click-beard:user");
 	},
 }));

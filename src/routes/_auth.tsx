@@ -1,15 +1,8 @@
 import barberShop from "@/assets/barber-shop.jpg";
-import { useAuthStore } from "@/lib/stores/auth";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
 	component: () => {
-		const { isAuthenticated } = useAuthStore();
-
-		if (isAuthenticated) {
-			return null;
-		}
-
 		return (
 			<div className="flex h-dvh w-full flex-col lg:flex-row">
 				{/* Left side - Image */}

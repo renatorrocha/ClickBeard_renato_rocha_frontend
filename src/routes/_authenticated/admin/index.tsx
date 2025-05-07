@@ -1,15 +1,9 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Navigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
-	beforeLoad: ({ context }) => {
-		const { user } = context.auth;
-
-		if (user?.role !== "ADMIN") {
-			return null;
-		}
-
-		return redirect({
-			to: "/admin/dashboard",
-		});
+	// Redireciona para o dashboard do admin
+	component: () => {
+		return <Navigate to="/admin/dashboard" />;
 	},
 });

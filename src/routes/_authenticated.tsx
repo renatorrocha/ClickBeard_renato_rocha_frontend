@@ -1,15 +1,39 @@
 import Header from "@/components/ui/header";
-import { useAuthStore } from "@/lib/stores/auth";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
-	component: () => {
-		const { isAuthenticated } = useAuthStore();
-
-		if (!isAuthenticated) {
-			return null;
+	beforeLoad: ({ context, location }) => {
+		// Verifica se o usuário está autenticado
+		if (!context.auth.isAuthenticated) {
+			throw redirect({
+				to: "/login",
+				search: {
+					redirect: location.href,
+				},
+			});
 		}
 
+		// Verifica se o usuário está tentando acessar uma rota admin
+		if (
+			location.pathname.startsWith("/admin") &&
+			context.auth.user?.role !== "ADMIN"
+		) {
+			throw redirect({
+				to: "/client",
+			});
+		}
+
+		// Verifica se o usuário está tentando acessar uma rota client
+		if (
+			location.pathname.startsWith("/client") &&
+			context.auth.user?.role !== "CLIENT"
+		) {
+			throw redirect({
+				to: "/admin",
+			});
+		}
+	},
+	component: () => {
 		return (
 			<div className="flex flex-col min-h-screen">
 				<Header />
