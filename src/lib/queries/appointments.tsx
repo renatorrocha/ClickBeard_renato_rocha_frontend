@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { apiPrivate } from "../api";
+import type { ICreateAppointment } from "../models/appointment";
+import { useAuthStore } from "../stores/auth";
 
 async function getAppointments() {
 	const response = await apiPrivate.get("/appointments");
@@ -27,6 +29,28 @@ export const useCancelAppointment = () => {
 		},
 		onError: () => {
 			toast.error("Erro ao cancelar agendamento");
+		},
+	});
+};
+
+async function createAppointment(appointment: ICreateAppointment) {
+	const { user } = useAuthStore();
+	const response = await apiPrivate.post("/appointments", {
+		...appointment,
+		clientId: user?.id,
+	});
+	return response.data;
+}
+
+export const useCreateAppointment = () => {
+	return useMutation({
+		mutationFn: (appointment: ICreateAppointment) =>
+			createAppointment(appointment),
+		onSuccess: () => {
+			toast.success("Agendamento criado com sucesso");
+		},
+		onError: () => {
+			toast.error("Erro ao criar agendamento");
 		},
 	});
 };

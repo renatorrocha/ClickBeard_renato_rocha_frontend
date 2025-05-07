@@ -27,15 +27,18 @@ export const useCreateBarber = () => {
 	});
 };
 
-async function getBarbers() {
-	const response = await apiPrivate.get<IBarberModel[]>("/barbers");
+async function getBarbers(specialtyId?: string) {
+	const response = await apiPrivate.get<IBarberModel[]>("/barbers", {
+		params: { specialtyId },
+	});
 
 	return response.data ?? [];
 }
 
-export const useGetBarbers = () => {
+export const useGetBarbers = (specialtyId?: string, enabled = true) => {
 	return useQuery({
-		queryKey: ["barbers"],
-		queryFn: getBarbers,
+		queryKey: ["barbers", specialtyId],
+		queryFn: () => getBarbers(specialtyId),
+		enabled,
 	});
 };
