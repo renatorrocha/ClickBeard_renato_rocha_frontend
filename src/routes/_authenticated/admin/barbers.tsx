@@ -161,9 +161,11 @@ function RouteComponent() {
 													</Badge>
 												</TableCell>
 												<TableCell>
-													{new Date(barber.createdAt).toLocaleDateString(
-														"pt-BR",
-													)}
+													{barber.createdAt
+														? new Date(barber.createdAt).toLocaleDateString(
+																"pt-BR",
+															)
+														: "N/A"}
 												</TableCell>
 												<TableCell className="text-right">
 													<div className="flex justify-end gap-2">

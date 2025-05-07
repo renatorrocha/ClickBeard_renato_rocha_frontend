@@ -158,7 +158,7 @@ export default function AppointmentForm({
 																	{barbersOptions?.map((option) => (
 																		<SelectItem
 																			key={option.value}
-																			value={option.value}
+																			value={option.value || ""}
 																		>
 																			{option.label}
 																		</SelectItem>
