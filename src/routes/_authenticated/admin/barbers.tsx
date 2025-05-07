@@ -160,7 +160,7 @@ function RouteComponent() {
 					</CardHeader>
 					<CardContent>
 						<div className="flex items-center mb-4">
-							<div className="flex items-center gap-2">
+							<div className=" items-center gap-2 hidden md:flex">
 								<div className="relative flex-1 max-w-sm">
 									<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
 									<Input
