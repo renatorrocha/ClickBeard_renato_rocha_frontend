@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_auth/register")({
 
 function RouteComponent() {
 	return (
-		<div className="flex flex-col gap-4 w-full max-w-md border rounded-lg p-4 shadow-md">
+		<div className="flex flex-col gap-4 w-full bg-gray-100 max-w-md border rounded-lg p-4 shadow-md">
 			<div className="text-center">
 				<h1 className="text-2xl font-bold">Novo usuário</h1>
 				<p className="text-sm text-muted-foreground">

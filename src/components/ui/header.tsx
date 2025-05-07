@@ -59,6 +59,7 @@ export default function Header() {
 	return (
 		<header className="bg-gray-900 text-white shadow-md">
 			<div className="container mx-auto px-4">
+				
 				<div className="flex justify-between items-center py-4">
 					<div className="flex items-center">
 						<h1 className="text-xl font-bold">

@@ -99,7 +99,10 @@ function RouteComponent() {
 								Cadastre e gerencie os barbeiros da sua barbearia
 							</CardDescription>
 						</div>
-						<Button onClick={() => setIsOpen(true)}>
+						<Button
+							onClick={() => setIsOpen(true)}
+							className="bg-blue-500 hover:bg-blue-600"
+						>
 							<Plus className="mr-2 h-4 w-4" />
 							Novo Barbeiro
 						</Button>
