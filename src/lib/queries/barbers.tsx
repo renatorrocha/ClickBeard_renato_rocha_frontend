@@ -1,5 +1,9 @@
 import { apiPrivate } from "@/lib/api";
-import type { IBarberModel, ICreateBarberModel } from "@/lib/models/barber";
+import type {
+	IBarberModel,
+	ICreateBarberModel,
+	IUpdateBarberModel,
+} from "@/lib/models/barber";
 import { queryClient } from "@/lib/providers/react-query/query-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
@@ -58,6 +62,27 @@ export const useDeleteBarber = () => {
 		},
 		onError: (error: AxiosError) => {
 			console.error(error);
+		},
+	});
+};
+
+async function updateBarber(barber: IUpdateBarberModel) {
+	const response = await apiPrivate.put(`/barbers/${barber.id}`, barber);
+	return response.data;
+}
+
+export const useUpdateBarber = () => {
+	return useMutation({
+		mutationFn: (barber: IUpdateBarberModel) => updateBarber(barber),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["barbers"] });
+			toast.success("Barbeiro atualizado com sucesso");
+		},
+		onError: (error: AxiosError) => {
+			console.error(error);
+			toast.error("Erro ao atualizar barbeiro", {
+				description: error.response?.data as string,
+			});
 		},
 	});
 };

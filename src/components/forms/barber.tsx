@@ -24,9 +24,10 @@ import {
 	createBarberModel,
 	updateBarberModel,
 } from "@/lib/models/barber";
-import { useCreateBarber } from "@/lib/queries/barbers";
+import { useCreateBarber, useUpdateBarber } from "@/lib/queries/barbers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function BarberForm({
@@ -34,38 +35,66 @@ export default function BarberForm({
 	onCancel,
 	isOpen,
 	specialties,
+	isEditing,
 }: {
 	onCancel: () => void;
 	barberData?: IBarberModel;
 	specialties: { id: string; label: string }[];
 	isOpen: boolean;
+	isEditing: boolean;
 }) {
-	const isEditing = Boolean(barberData);
+	const { mutate: createBarber, isPending: isCreatingBarber } =
+		useCreateBarber();
+	const { mutate: updateBarber, isPending: isUpdatingBarber } =
+		useUpdateBarber();
 
 	const specialtiesOptions = specialties.map((specialty) => ({
 		label: specialty.label,
 		value: specialty.id,
 	}));
 
-	const { mutate: createBarber, isPending: isCreatingBarber } =
-		useCreateBarber();
 	const form = useForm<ICreateBarberModel | IUpdateBarberModel>({
 		resolver: zodResolver(isEditing ? updateBarberModel : createBarberModel),
 		defaultValues: {
-			name: barberData?.name || "",
-			document: barberData?.document || "",
-			specialties: barberData?.specialties.map((spec) => spec.id) || [],
-			...(isEditing && { id: barberData?.id }),
+			name: "",
+			document: "",
+			specialties: [],
 		},
 	});
 
+	useEffect(() => {
+		if (barberData && isEditing) {
+			form.reset({
+				name: barberData.name,
+				document: barberData.document,
+				specialties: barberData.specialties.map((spec) => spec.id),
+				id: barberData.id,
+			});
+		} else {
+			form.reset({
+				name: "",
+				document: "",
+				specialties: [],
+			});
+		}
+	}, [barberData, isEditing, form]);
+
 	async function onSubmit(data: ICreateBarberModel | IUpdateBarberModel) {
-		createBarber(data, {
-			onSuccess: () => {
-				form.reset();
-				onCancel();
-			},
-		});
+		if (isEditing) {
+			updateBarber(data as IUpdateBarberModel, {
+				onSuccess: () => {
+					form.reset();
+					onCancel();
+				},
+			});
+		} else {
+			createBarber(data as ICreateBarberModel, {
+				onSuccess: () => {
+					form.reset();
+					onCancel();
+				},
+			});
+		}
 	}
 
 	return (
@@ -138,7 +167,7 @@ export default function BarberForm({
 
 							<ControlledBtn
 								type="submit"
-								isLoading={isCreatingBarber}
+								isLoading={isEditing ? isUpdatingBarber : isCreatingBarber}
 								className="w-fit"
 							>
 								<Save className="mr-2 h-4 w-4" />

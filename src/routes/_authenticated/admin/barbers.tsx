@@ -26,6 +26,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import type { IBarberModel } from "@/lib/models/barber";
 import { useGetBarbers } from "@/lib/queries/barbers";
 import { useSpecialties } from "@/lib/queries/utils";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -46,7 +47,11 @@ function RouteComponent() {
 	const { data: barbers } = useGetBarbers();
 	const { barberName, specialty } = Route.useSearch();
 	const [isOpen, setIsOpen] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
 	const navigate = useNavigate({ from: Route.fullPath });
+	const [selectedBarber, setSelectedBarber] = useState<
+		IBarberModel | undefined
+	>();
 
 	function handleSearchBarber(name: string) {
 		navigate({
@@ -170,11 +175,18 @@ function RouteComponent() {
 												</TableCell>
 												<TableCell className="text-right">
 													<div className="flex justify-end gap-2">
-														<Button variant="ghost" size="icon">
+														<Button
+															variant="ghost"
+															size="icon"
+															onClick={() => {
+																setSelectedBarber(barber);
+																setIsEditing(true);
+																setIsOpen(true);
+															}}
+														>
 															<Pencil className="h-4 w-4" />
 															<span className="sr-only">Editar</span>
 														</Button>
-
 														<DeleteBarberButton barberId={barber.id ?? ""} />
 													</div>
 												</TableCell>
@@ -201,9 +213,14 @@ function RouteComponent() {
 
 			<BarberForm
 				specialties={specialties ?? []}
-				onCancel={() => setIsOpen(false)}
-				barberData={undefined}
+				onCancel={() => {
+					setIsOpen(false);
+					setIsEditing(false);
+					setSelectedBarber(undefined);
+				}}
+				barberData={selectedBarber}
 				isOpen={isOpen}
+				isEditing={isEditing}
 			/>
 		</>
 	);
