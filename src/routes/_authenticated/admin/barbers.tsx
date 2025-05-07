@@ -25,70 +25,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useGetBarbers } from "@/lib/queries/barbers";
 import { useSpecialties } from "@/lib/queries/utils";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Pencil, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
-
-type Barber = {
-	id: string;
-	name: string;
-	specialty: { label: string; id: string }[];
-	createdAt: Date;
-};
-
-// Dados de exemplo
-const initialBarbers: Barber[] = [
-	{
-		id: "1",
-		name: "Renato Silva",
-		specialty: [
-			{ label: "Corte Degradê", id: "Corte Degradê" },
-			{ label: "Corte Tesoura", id: "Corte Tesoura" },
-		],
-		createdAt: new Date(2023, 5, 12),
-	},
-	{
-		id: "2",
-		name: "Carlos Oliveira",
-		specialty: [
-			{ label: "Barba", id: "Barba" },
-			{ label: "Corte Degradê", id: "Corte Degradê" },
-		],
-		createdAt: new Date(2023, 8, 23),
-	},
-	{
-		id: "3",
-		name: "Felipe Santos",
-		specialty: [
-			{ label: "Corte Degradê", id: "Corte Degradê" },
-			{ label: "Corte Tesoura", id: "Corte Tesoura" },
-		],
-		createdAt: new Date(2024, 1, 5),
-	},
-	{
-		id: "4",
-		name: "André Martins",
-		specialty: [{ label: "Corte Degradê", id: "Corte Degradê" }],
-		createdAt: new Date(2023, 11, 15),
-	},
-	{
-		id: "5",
-		name: "Lucas Ferreira",
-		specialty: [{ label: "Barba", id: "Barba" }],
-		createdAt: new Date(2024, 2, 8),
-	},
-	{
-		id: "6",
-		name: "Gustavo Mendes",
-		specialty: [
-			{ label: "Sobrancelha", id: "Sobrancelha" },
-			{ label: "Corte Degradê", id: "Corte Degradê" },
-		],
-		createdAt: new Date(2023, 7, 19),
-	},
-];
 
 export const Route = createFileRoute("/_authenticated/admin/barbers")({
 	validateSearch: z.object({
@@ -100,7 +42,7 @@ export const Route = createFileRoute("/_authenticated/admin/barbers")({
 
 function RouteComponent() {
 	const { data: specialties } = useSpecialties();
-	const [barbers, setBarbers] = useState<Barber[]>(initialBarbers);
+	const { data: barbers } = useGetBarbers();
 	const { barberName, specialty } = Route.useSearch();
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate({ from: Route.fullPath });
@@ -114,17 +56,13 @@ function RouteComponent() {
 		});
 	}
 
-	const allSpecialties = barbers
-		.flatMap((barber) => barber.specialty.map((specialty) => specialty.id))
-		.filter((specialty, index, self) => self.indexOf(specialty) === index);
-
-	const filteredBarbers = barbers.filter((barber) => {
+	const filteredBarbers = barbers?.filter((barber) => {
 		const nameMatch =
 			!barberName ||
 			barber.name.toLowerCase().includes(barberName.toLowerCase());
 
 		const specialtyMatch =
-			!specialty || barber.specialty.some((s) => s.id === specialty);
+			!specialty || barber.specialties.some((s) => s.id === specialty);
 
 		return nameMatch && specialtyMatch;
 	});
@@ -180,9 +118,9 @@ function RouteComponent() {
 									</SelectTrigger>
 
 									<SelectContent>
-										{allSpecialties.map((specialty) => (
-											<SelectItem key={specialty} value={specialty}>
-												{specialty}
+										{specialties?.map((specialty) => (
+											<SelectItem key={specialty.id} value={specialty.id}>
+												{specialty.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -194,7 +132,7 @@ function RouteComponent() {
 							</div>
 
 							<div className="ml-auto text-sm text-muted-foreground">
-								{filteredBarbers.length} barbeiros encontrados
+								{filteredBarbers?.length} barbeiros encontrados
 							</div>
 						</div>
 
@@ -209,7 +147,7 @@ function RouteComponent() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{filteredBarbers.length > 0 ? (
+									{filteredBarbers?.length && filteredBarbers.length > 0 ? (
 										filteredBarbers.map((barber) => (
 											<TableRow key={barber.id}>
 												<TableCell className="font-medium">
@@ -217,13 +155,15 @@ function RouteComponent() {
 												</TableCell>
 												<TableCell>
 													<Badge variant="outline">
-														{barber.specialty
+														{barber.specialties
 															.map((specialty) => specialty.label)
 															.join(", ")}
 													</Badge>
 												</TableCell>
 												<TableCell>
-													{barber.createdAt.toLocaleDateString("pt-BR")}
+													{new Date(barber.createdAt).toLocaleDateString(
+														"pt-BR",
+													)}
 												</TableCell>
 												<TableCell className="text-right">
 													<div className="flex justify-end gap-2">

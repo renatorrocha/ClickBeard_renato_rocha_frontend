@@ -5,15 +5,19 @@ export const barberModel = z.object({
 	name: z.string().min(1, { message: "Nome é obrigatório" }),
 	document: z.string().min(1, { message: "CPF é obrigatório" }),
 	specialties: z
-		.array(z.string())
+		.array(z.object({ id: z.string(), label: z.string() }))
 		.min(1, { message: "Especialidades são obrigatórias" }),
-	createdAt: z.date(),
+	createdAt: z.coerce.date(),
 });
 
-export const createBarberModel = barberModel.omit({
-	id: true,
-	createdAt: true,
-});
+export const createBarberModel = barberModel
+	.omit({
+		id: true,
+		createdAt: true,
+	})
+	.extend({
+		specialties: z.array(z.string()),
+	});
 
 export const updateBarberModel = barberModel.omit({
 	id: true,

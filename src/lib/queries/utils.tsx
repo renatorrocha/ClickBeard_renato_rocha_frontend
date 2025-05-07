@@ -2,7 +2,8 @@ import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 export async function getSpecialties() {
-	const response = await api.get("/utils/specialties");
+	const response =
+		await api.get<{ id: string; label: string }[]>("/utils/specialties");
 
 	return response.data ?? [];
 }

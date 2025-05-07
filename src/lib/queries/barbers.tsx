@@ -1,7 +1,7 @@
 import { apiPrivate } from "@/lib/api";
-import type { ICreateBarberModel } from "@/lib/models/barber";
+import type { IBarberModel, ICreateBarberModel } from "@/lib/models/barber";
 import { queryClient } from "@/lib/providers/react-query/query-client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 
@@ -24,5 +24,18 @@ export const useCreateBarber = () => {
 				description: error.response?.data as string,
 			});
 		},
+	});
+};
+
+async function getBarbers() {
+	const response = await apiPrivate.get<IBarberModel[]>("/barbers");
+
+	return response.data ?? [];
+}
+
+export const useGetBarbers = () => {
+	return useQuery({
+		queryKey: ["barbers"],
+		queryFn: getBarbers,
 	});
 };
