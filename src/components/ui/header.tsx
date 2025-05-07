@@ -15,7 +15,7 @@ export default function Header() {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const navigation: NavItem[] = [
+	const adminNavigation: NavItem[] = [
 		{
 			name: "Agendamentos",
 			href: "/admin/dashboard",
@@ -25,6 +25,14 @@ export default function Header() {
 			name: "Barbeiros",
 			href: "/admin/barbers",
 			icon: <Users className="w-5 h-5 mr-2" />,
+		},
+	];
+
+	const clientNavigation: NavItem[] = [
+		{
+			name: "Agendamentos",
+			href: "/client/dashboard",
+			icon: <Calendar className="w-5 h-5 mr-2" />,
 		},
 	];
 
@@ -42,6 +50,11 @@ export default function Header() {
 	function isActive(path: string) {
 		return location.pathname.includes(path);
 	}
+
+	const navigation =
+		useAuthStore.getState().user?.role === "ADMIN"
+			? adminNavigation
+			: clientNavigation;
 
 	return (
 		<header className="bg-gray-900 text-white shadow-md">
