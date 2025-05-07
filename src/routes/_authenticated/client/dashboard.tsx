@@ -9,8 +9,10 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import type { IAppointment } from "@/lib/models/appointment";
+import { useGetAppointmentsByClientId } from "@/lib/queries/appointments";
+import { useAuthStore } from "@/lib/stores/auth";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/client/dashboard")({
@@ -18,123 +20,11 @@ export const Route = createFileRoute("/_authenticated/client/dashboard")({
 });
 
 function RouteComponent() {
-	// const { data: appointments } = useGetAppointments();
+	const { user } = useAuthStore();
+	const { data: appointments, isLoading } = useGetAppointmentsByClientId(
+		user?.id || "",
+	);
 	const [isOpen, setIsOpen] = useState(false);
-	const appointments: IAppointment[] = [
-		{
-			id: "1",
-			date: new Date("2024-01-01"),
-			canceledAt: new Date("2024-01-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-			createdAt: new Date("2024-01-01"),
-			updatedAt: new Date("2024-01-01"),
-		},
-		{
-			id: "2",
-			date: new Date("2024-01-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "3",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "4",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "5",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "6",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "7",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "8",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "9",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "10",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-		{
-			id: "1",
-			date: new Date("2025-06-01"),
-			specialty: {
-				name: "Cabelo",
-			},
-			barber: {
-				name: "João da Silva",
-			},
-		},
-	];
 
 	return (
 		<>
@@ -154,22 +44,30 @@ function RouteComponent() {
 				</CardHeader>
 
 				<CardContent>
-					{appointments.length === 0 ? (
-						<div className="text-center py-10">
-							<p className="text-muted-foreground">
-								Você não possui agendamentos.
-							</p>
+					{isLoading ? (
+						<div className="flex justify-center items-center h-full">
+							<Loader2 className="h-4 w-4 animate-spin" />
 						</div>
 					) : (
 						<div className="space-y-4">
-							{appointments.map((appointment) => {
-								return (
-									<AppointmentCard
-										key={appointment.id}
-										appointment={appointment}
-									/>
-								);
-							})}
+							{appointments.length === 0 ? (
+								<div className="text-center py-10">
+									<p className="text-muted-foreground">
+										Você não possui agendamentos.
+									</p>
+								</div>
+							) : (
+								<div className="space-y-4">
+									{appointments.map((appointment: IAppointment) => {
+										return (
+											<AppointmentCard
+												key={appointment.id}
+												appointment={appointment}
+											/>
+										);
+									})}
+								</div>
+							)}
 						</div>
 					)}
 				</CardContent>

@@ -69,6 +69,7 @@ export default function AppointmentPicker({
 									<div className="grid gap-1.5 px-5 max-sm:grid-cols-2">
 										{timeSlots.map(({ time: timeSlot, available }) => (
 											<Button
+												type="button"
 												key={timeSlot}
 												variant={time === timeSlot ? "default" : "outline"}
 												size="sm"

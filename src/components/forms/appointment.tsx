@@ -3,6 +3,7 @@ import type { ICreateAppointment } from "@/lib/models/appointment";
 import { useCreateAppointment } from "@/lib/queries/appointments";
 import { useGetBarbers } from "@/lib/queries/barbers";
 import { useSpecialties } from "@/lib/queries/utils";
+import { useAuthStore } from "@/lib/stores/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,8 +38,9 @@ export default function AppointmentForm({
 	onCancel: () => void;
 	isOpen: boolean;
 }) {
+	const { user } = useAuthStore();
 	const { mutate: createAppointment, isPending: isCreatingAppointment } =
-		useCreateAppointment();
+		useCreateAppointment(user?.id || "");
 	const { data: specialties } = useSpecialties();
 	const [time, setTime] = useState<string | null>(null);
 

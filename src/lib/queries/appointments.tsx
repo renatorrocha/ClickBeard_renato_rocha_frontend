@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { apiPrivate } from "../api";
 import type { ICreateAppointment } from "../models/appointment";
-import { useAuthStore } from "../stores/auth";
+import { queryClient } from "../providers/react-query/query-client";
 
 async function getAppointments() {
 	const response = await apiPrivate.get("/appointments");
@@ -33,24 +33,39 @@ export const useCancelAppointment = () => {
 	});
 };
 
-async function createAppointment(appointment: ICreateAppointment) {
-	const { user } = useAuthStore();
+async function createAppointment(
+	appointment: ICreateAppointment,
+	clientId: string,
+) {
 	const response = await apiPrivate.post("/appointments", {
 		...appointment,
-		clientId: user?.id,
+		userId: clientId,
 	});
 	return response.data;
 }
 
-export const useCreateAppointment = () => {
+export const useCreateAppointment = (clientId: string) => {
 	return useMutation({
 		mutationFn: (appointment: ICreateAppointment) =>
-			createAppointment(appointment),
+			createAppointment(appointment, clientId),
 		onSuccess: () => {
 			toast.success("Agendamento criado com sucesso");
+			queryClient.invalidateQueries({ queryKey: ["appointments"] });
 		},
 		onError: () => {
 			toast.error("Erro ao criar agendamento");
 		},
+	});
+};
+
+async function getAppointmentsByClientId(userId: string) {
+	const response = await apiPrivate.get(`/appointments/${userId}`);
+	return response.data ?? [];
+}
+
+export const useGetAppointmentsByClientId = (userId: string) => {
+	return useQuery({
+		queryKey: ["appointments", userId],
+		queryFn: () => getAppointmentsByClientId(userId),
 	});
 };
