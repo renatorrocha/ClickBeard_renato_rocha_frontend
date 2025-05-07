@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { type IRegisterSchema, registerSchema } from "@/lib/models/auth";
+import { useRegister } from "@/lib/queries/auth";
 import { z } from "zod";
-import { Button } from "../ui/button";
 import {
 	Form,
 	FormControl,
@@ -12,28 +13,29 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import ControlledBtn from "./controlled-btn";
 
-const registerSchema = z.object({
-	email: z.string({ required_error: "Email é obrigatório" }).email({
-		message: "Email inválido",
-	}),
-	name: z
-		.string({ required_error: "Nome é obrigatório" })
-		.min(1, { message: "Nome é obrigatório" }),
-	password: z
-		.string({ required_error: "Senha é obrigatória" })
-		.min(8, { message: "Senha deve ter pelo menos 8 caracteres" }),
+const teste = z.object({
+	name: z.string(),
+	email: z.string().email(),
+	password: z.string().min(8),
 });
 
-type RegisterSchema = z.infer<typeof registerSchema>;
-
 export default function RegisterForm() {
-	const form = useForm<RegisterSchema>({
-		resolver: zodResolver(registerSchema),
+	const { mutate: register, isPending } = useRegister();
+
+	const form = useForm<IRegisterSchema>({
+		resolver: zodResolver(teste),
+
+		defaultValues: {
+			name: "",
+			email: "",
+			password: "",
+		},
 	});
 
-	async function onSubmit(data: RegisterSchema) {
-		console.log(data);
+	async function onSubmit(data: IRegisterSchema) {
+		register(data);
 	}
 
 	return (
@@ -87,9 +89,9 @@ export default function RegisterForm() {
 					)}
 				/>
 
-				<Button type="submit" className="w-full">
+				<ControlledBtn type="submit" isLoading={isPending} className="w-fit">
 					Criar conta
-				</Button>
+				</ControlledBtn>
 			</form>
 		</Form>
 	);

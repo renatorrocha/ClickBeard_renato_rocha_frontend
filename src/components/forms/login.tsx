@@ -1,3 +1,4 @@
+import { type ILoginSchema, loginSchema } from "@/lib/models/auth";
 import { useAuthStore } from "@/lib/stores/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,32 +14,19 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-const loginSchema = z.object({
-	email: z.string({ required_error: "Email é obrigatório" }).email({
-		message: "Email inválido",
-	}),
-	password: z
-		.string({ required_error: "Senha é obrigatória" })
-		.min(8, { message: "Senha deve ter pelo menos 8 caracteres" }),
-});
-
-type LoginSchema = z.infer<typeof loginSchema>;
-
 export default function LoginForm() {
-	const form = useForm<LoginSchema>({
+	const form = useForm<ILoginSchema>({
 		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
 	});
 
 	const { login } = useAuthStore();
 
-	async function onSubmit(data: LoginSchema) {
-		login({
-			email: data.email,
-			password: data.password,
-			name: "renato",
-			role: "CLIENT",
-			token: "1234567890",
-		});
+	async function onSubmit(data: ILoginSchema) {
+		login(data);
 	}
 
 	return (
